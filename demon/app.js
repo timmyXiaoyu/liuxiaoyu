@@ -4,8 +4,13 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// 渲染视图接口
+var objRouter = require('./routes/index');
+// var usersRouter = require('./routes/users');
+
+
+// 渲染api接口
+var apiRouter = require('./api/index');
 
 var app = express();
 
@@ -19,8 +24,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// 挂载视图路由
+for(var i in objRouter){
+  app.use(i,objRouter[i]);
+}
+// 挂载api路由
+for(let i in apiRouter){
+  app.use('/api'+i,apiRouter[i]);
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
