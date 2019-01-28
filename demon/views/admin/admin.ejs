@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+    <title>管理员登录</title>
+</head>
+
+<body>
+    <p>账号: <input type="text" class="un"></p>
+    <p>密码: <input type="text" class="pw"></p>
+    <p><button class="btn">login</button></p>
+    <script>
+        function add() {
+            $.ajax({
+                type: 'post',
+                url: '/api/admin/add_admin',
+                data: {
+                    username: 'admin',
+                    password: '123456'
+                },
+                success: function (e) {
+                    debugger
+                },
+                error: function (e) {
+                    debugger
+                }
+            })
+        }
+        $('.btn').on('click', function (e) {
+            $.ajax({
+                type: 'get',
+                url: '/api/admin/login',
+                success: function (e) {
+                    if (e.code == 0) {
+                        for (var i in e.data) {
+                            if (e.data[i]['username'] == $('.un').val() && e.data[i]['password'] == $('.pw').val()) {
+                                alert('登录成功');
+                                break;
+                            }
+                        }
+                    }
+                },
+                error: function (e) {
+                    debugger
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>

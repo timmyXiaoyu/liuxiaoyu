@@ -6,4 +6,8 @@ router.post('/add_type',function(req,res){
     server.addType(req,res);
 })
 
+router.get('/search_type',function(req,res){
+    server.searchType(req,res);
+})
+
 module.exports=router;

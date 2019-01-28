@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,22 +8,84 @@
     <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
     <title>房间类型添加</title>
 </head>
+
 <body>
-    类型<input type="text">
+    <p>类型名称：<input type="text" class="type"></p>
+    <p>房间面积：<input type="text" class="size"></p>
+    <p>床位数量：<input type="text" class="bednum"></p>
+    <p>早餐：<select name="" id="breakfast">
+            <option value="有">有</option>
+            <option value="无">无</option>
+        </select></p>
+    <p>网络：<select name="" id="net">
+            <option value="有">有</option>
+            <option value="无">无</option>
+        </select></p>
+    <p>电视：<select name="" id="tv">
+            <option value="有">有</option>
+            <option value="无">无</option>
+        </select></p>
+    <p>浴室：<select name="" id="bathroom">
+            <option value="有">有</option>
+            <option value="无">无</option>
+        </select></p>
+    <p>总量：<input type="text" class="allnum"></p>
+    <p><button class="btn">submit</button></p>
     <script>
-        $.ajax({
-            type:'post',
-            url:'/api/room/add_type',
-            data:{
-                
-            },
-            success:function(e){
-                debugger
-            },
-            error:function(e){
-                debugger
-            }
-        })    
+        function addType() {
+            $.ajax({
+                type: 'post',
+                url: '/api/room/add_type',
+                data: {
+                    room_size: $('.size').val(),
+                    roomtype_name: $('.type').val(),
+                    bednum: $('.bednum').val(),
+                    surplusnum: $('.allnum').val(),
+                    tv: $('#tv').val(),
+                    breakfast: $('#breakfast').val(),
+                    bathroom: $('#bathroom').val(),
+                    webnet: $('#net').val(),
+                },
+                success: function (e) {
+                    if (e.code == 0) {
+                        alert(e.msg);
+                        location.reload();
+                    }
+                },
+                error: function (e) {
+                    debugger
+                }
+            })
+        }
+        $('.btn').on('click', function () {
+            searchType();
+        })
+        function searchType() {
+            $.ajax({
+                type: 'get',
+                url: '/api/room/search_type',
+                success: function (e) {
+                    debugger
+                    var data = e.data;
+                    if (e.code == 0) {
+                        for (var i in data) {
+                            if (data[i].room_size == $('.size').val() && data[i].roomtype_name == $('.type').val() && data[i].bednum == $('.bednum').val() && data[i].surplusnum == $('.allnum').val() && data[i].tv == $('#tv').val() && data[i].breakfast == $('#breakfast').val() && data[i].bathroom == $('#bathroom').val() && data[i].webnet == $('#net').val()) {
+                                alert('该房间类型已存在');
+                                break;
+                            }else{
+                                addType();
+                                break;
+                            }
+                        }
+                    }
+
+                },
+                error: function (e) {
+                    debugger
+                }
+            })
+        }
     </script>
 </body>
+
 </html>
