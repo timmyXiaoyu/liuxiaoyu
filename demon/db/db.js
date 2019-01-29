@@ -153,20 +153,20 @@ function Desc(tabname,data,callback){
      })
 }
 // 多表联查
-// function selectMore(tabname,data,callback){
-//      // console.log(data);
-//      let sql=`SELECT * from \`${tabname['tabname1']}\` as a JOIN \`${tabname['tabname2']}\` as b on a.${data['fid']}=b.${data['zid']} ORDER by a.${data['zid']} DESC `;
-//      // console.log(sql);
-//      query(sql,function(res){
-//           var json='';
-//           if(res){
-//                json=format_data(0,'查询数据成功',res);
-//           }else{
-//                json=format_data(1,'查询数据失败');
-//           }
-//           callback(json);
-//      })
-// }
+function selectMore(tabname,data,callback){
+     // console.log(data);
+     let sql=`SELECT * from \`${tabname['tab1']}\` as a JOIN \`${tabname['tab2']}\` as b on a.${data['id1']}=b.${data['id2']} ORDER by a.${data['id1']} DESC `;
+     // console.log(sql);
+     query(sql,function(res){
+          var json='';
+          if(res){
+               json=format_data(0,'查询数据成功',res);
+          }else{
+               json=format_data(1,'查询数据失败');
+          }
+          callback(json);
+     })
+}
 // // 多表联查一条数据
 // function selectMoreOne(tabname,data,callback){
 //      // console.log(data);
@@ -182,23 +182,23 @@ function Desc(tabname,data,callback){
 //           callback(json);
 //      })
 // }
-// // 分页查询
-// function searchPage(tabname,callback){
-//      var sql=`select * from \`${tabname}\``;
-//      query(sql,function(res){
-//           var json='';
-//           if(res){
-//                console.log(res.length);
-//                var count=res.length;
-//                json=format_List(0,'查询数据成功',count,res);
-//           }else{
-//                json=format_List(1,'查询数据失败');
-//           }
-//           callback(json);
-//      })
-// }
+// 分页查询
+function searchPage(tabname,data,callback){
+    let sql=`SELECT * from \`${tabname['tab1']}\` as a JOIN \`${tabname['tab2']}\` as b on a.${data['id1']}=b.${data['id2']} ORDER by a.${data['id1']} DESC `;
+     query(sql,function(res){
+          var json='';
+          if(res){
+               console.log(res.length);
+               var count=res.length;
+               json=format_List(0,'查询数据成功',count,res);
+          }else{
+               json=format_List(1,'查询数据失败');
+          }
+          callback(json);
+     })
+}
 module.exports={
-     insert,search,selectWhere,update,del,Desc
+     insert,search,selectWhere,update,del,Desc,selectMore,searchPage
 }
 
 // SELECT * FROM `article` ORDER BY id DESC  倒序

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+    <title>价格添加</title>
+</head>
+
+<body>
+    类型<select name="" id="type">
+        
+    </select><br>
+    时价<input type="text" class="hour"><br>
+    天价<input type="text" class="day"><br>
+    月价<input type="text" class="month"><br>
+    <button class="btn">提交</button><br>
+    <script>
+        function sel() {
+            $.ajax({
+                type:'get',
+                url:'/api/room/search_type',
+                success:function(e){
+                    debugger
+                    var data=e.data;
+                    if(e.code==0){
+                        var html='';
+                        for(var i in data){
+                            html+=`<option value="${data[i]['roomtype_id']}">${data[i]['roomtype_name']}</option>`;
+                        }
+                        $('#type').html(html);
+                    }
+                }
+            })
+        }
+        sel();
+        function addprice(){
+            $.ajax({
+                type:'post',
+                url:'/api/room/add_price',
+                data:{
+                    roomtype_id:$('#type').val(),
+                    hour_price:$('.hour').val(),
+                    day_price:$('.day').val(),
+                    month_price:$('.month').val(),
+                },
+                success:function(e){
+                    debugger
+                    var data=e.data;
+                    if(e.code==0){
+                        alert('价格添加成功');
+                    }
+                },
+                error:function(e){
+                    debugger
+                }
+            })
+        }
+        $('.btn').on('click',function(){
+            addprice();
+        })
+    </script>
+</body>
+
+</html>
