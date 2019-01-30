@@ -66,7 +66,7 @@ function search(tabname,callback){
      
      var sql=`select * from \`${tabname}\``;
      query(sql,function(res){
-          console.log(res);
+        //   console.log(res);
           var json='';
           if(res){
                json=format_data(0,'查询数据成功',res);
@@ -78,13 +78,14 @@ function search(tabname,callback){
 }
 // 根据条件查询数据
 function selectWhere(tabname,data,callback){
+    console.log(data);
      let where_='';
      for(var i in data){
           where_+=`${i}='${data[i]}' and `
      }
      where_+='1';
      let sql=`select * from \`${tabname}\` where ${where_}`;
-     // console.log(sql);
+    //  console.log(sql);
      query(sql,function(res){
           var json='';
           if(res){
@@ -98,8 +99,9 @@ function selectWhere(tabname,data,callback){
 // 修改数据
 function update(tabname,data,callback){
      let set_ = where_ = '';
-     where_ = 'id='+data['id']; //where条件
-     delete data.id;  //删除对象中的id
+     var id=`${tabname}_id`;
+     where_ = `${id}=${data[id]}`; //where条件
+     delete data[id];  //删除对象中的id
      // 拼接修改字段字段
      for(let i in data){
          set_ += `${i}='${data[i]}',`;
@@ -108,6 +110,7 @@ function update(tabname,data,callback){
      let aa = set_.substr(0,xx);
  
      let sql = `update \`${tabname}\` set ${aa} where ${where_}`;
+     console.log(sql);
      query(sql, function (result) {
          var json = '';
          if (result) {

@@ -29,9 +29,82 @@
             <option value="有">有</option>
             <option value="无">无</option>
         </select></p>
+    <p>价格：<input type="text" class="price"></p>
     <p>总量：<input type="text" class="allnum"></p>
+    <p>剩余：<input type="text" class="surnum"></p>
     <p><button class="btn">submit</button></p>
     <script>
+        // 获取修改信息的id
+        function getId() {
+            var typeid = location.search.split('?')[1];
+            if (typeid == undefined) {
+                return null;
+            } else {
+                return typeid;
+            }
+        }
+        var typeid = getId();
+        if (typeid != null) {
+            searchOne(typeid);
+        }
+        // 根据ID查询一条信息 渲染修改页面
+        function searchOne(id) {
+            $.ajax({
+                type: 'get',
+                url: '/api/room/selOne',
+                data: {
+                    roomtype_id: id
+                },
+                success: function (e) {
+                    var data=e.data;
+                    if (e.code == 0) {
+                        $('.size').val(data[0]['room_size']);
+                        $('.type').val(data[0]['roomtype_name']);
+                        $('.bednum').val(data[0]['bednum']);
+                        $('.surnum').val(data[0]['surplusnum']);
+                        $('#tv').val(data[0]['tv']);
+                        $('#breakfast').val(data[0]['breakfast']);
+                        $('#bathroom').val(data[0]['bathroom']);
+                        $('#net').val(data[0]['webnet']);
+                        $('.price').val(data[0]['price']);
+                        $('.allnum').val(data[0]['allnum']);
+                    }
+                },
+                error: function (e) {
+                    debugger
+                }
+            })
+        }
+        // 修改类别信息
+        function update(id){
+            $.ajax({
+                type:'post',
+                url:'/api/room/updateOne',
+                data:{
+                    roomtype_id:id,
+                    room_size: $('.size').val(),
+                    roomtype_name: $('.type').val(),
+                    bednum: $('.bednum').val(),
+                    surplusnum: $('.surnum').val(),
+                    tv: $('#tv').val(),
+                    breakfast: $('#breakfast').val(),
+                    bathroom: $('#bathroom').val(),
+                    webnet: $('#net').val(),
+                    price: $('.price').val(),
+                    allnum: $('.allnum').val(),
+                },
+                success:function(e){
+                    debugger
+                    if(e.code==0){
+                        alert(e.msg);
+                    }
+                },
+                error:function(e){
+                    debugger
+                }
+            })
+        }
+        // 添加类别信息
         function addType() {
             $.ajax({
                 type: 'post',
@@ -40,11 +113,13 @@
                     room_size: $('.size').val(),
                     roomtype_name: $('.type').val(),
                     bednum: $('.bednum').val(),
-                    surplusnum: $('.allnum').val(),
+                    surplusnum: $('.surnum').val(),
                     tv: $('#tv').val(),
                     breakfast: $('#breakfast').val(),
                     bathroom: $('#bathroom').val(),
                     webnet: $('#net').val(),
+                    price: $('.price').val(),
+                    allnum: $('.allnum').val(),
                 },
                 success: function (e) {
                     if (e.code == 0) {
@@ -57,9 +132,15 @@
                 }
             })
         }
+        // 保存类别信息
         $('.btn').on('click', function () {
-            searchType();
+            if (typeid == null) {
+                searchType();
+            }else{
+                update(typeid);
+            }
         })
+        // 查询是否有相同类别
         function searchType() {
             $.ajax({
                 type: 'get',
@@ -72,7 +153,7 @@
                             if (data[i].room_size == $('.size').val() && data[i].roomtype_name == $('.type').val() && data[i].bednum == $('.bednum').val() && data[i].surplusnum == $('.allnum').val() && data[i].tv == $('#tv').val() && data[i].breakfast == $('#breakfast').val() && data[i].bathroom == $('#bathroom').val() && data[i].webnet == $('#net').val()) {
                                 alert('该房间类型已存在');
                                 break;
-                            }else{
+                            } else {
                                 addType();
                                 break;
                             }

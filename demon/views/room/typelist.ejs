@@ -7,6 +7,12 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
     <title>房间类型</title>
+    <style>
+    th,td{
+        text-align: center;
+        padding: 10px;
+    }
+    </style>
 </head>
 
 <body>
@@ -14,40 +20,46 @@
         <thead>
             <th>序号</th>
             <th>房间类型</th>
-            <th>房间名称</th>
             <th>房间大小</th>
-            <th>时价</th>
-            <th>天价</th>
-            <th>月价</th>
+            <th>房价</th>
             <th>浴室</th>
             <th>早餐</th>
             <th>电视</th>
             <th>网络</th>
+            <th>房间总量</th>
+            <th>剩余量</th>
             <th>操作</th>
         </thead>
         <tbody class="list">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="" tabindex=""></td>
+
         </tbody>
     </table>
     <script>
-        // 多表联查 类型-价格
+        // 查询渲染类别信息
         function moreTab() {
             $.ajax({
                 type: 'get',
-                url: '/api/room/searchPage',
+                url: '/api/room/search_type',
                 success: function (e) {
-                    if(e.code==0){
-                        var html='';
+                    var data = e.data;
+                    if (e.code == 0) {
+                        var html = '';
+                        for (var i in data) {
+                            html += `<tr>
+                            <td>${i+1}</td>
+                            <td>${data[i]['roomtype_name']}</td>
+                            <td>${data[i]['room_size']}</td>
+                            <td>${data[i]['price']}</td>
+                            <td>${data[i]['bathroom']}</td>
+                            <td>${data[i]['breakfast']}</td>
+                            <td>${data[i]['tv']}</td>
+                            <td>${data[i]['webnet']}</td>
+                            <td>${data[i]['allnum']}</td>
+                            <td>${data[i]['surplusnum']}</td>
+                            <td class="${data[i]['roomtype_id']}"><span onclick="update(this)"><a href="addtype?${data[i]['roomtype_id']}">修改</a></span><span onclick="del(this)">删除</span></td>
+                            </tr>`;
+                        }
+                        $('.list').html(html);
                     }
                 },
                 error: function (e) {
@@ -56,6 +68,26 @@
             })
         }
         moreTab();
+        // 删除类别信息
+        function del(obj){
+            var typeid=obj.parentNode.className;
+            delType(typeid);
+        }
+        //删除 
+        function delType(id){
+            $.ajax({
+                type:'post',
+                url:'/api/room/del_type',
+                data:{
+                    roomtype_id:id
+                },
+                success:function(e){
+                    if(e.code==0){
+                        alert(e.msg);
+                    }
+                }
+            })
+        }
     </script>
 </body>
 

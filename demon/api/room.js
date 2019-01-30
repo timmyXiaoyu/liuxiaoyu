@@ -13,12 +13,28 @@ router.get('/search_type',function(req,res){
 router.post('/add_price',function(req,res){
     server.addPrice(req,res);
 })
-// 多表联查：房间类型-价格
-router.get('/search_typePrice',function(req,res){
-    server.selType_Price(req,res);
+// 多表联查：房间-位置
+router.get('/search_roomPos',function(req,res){
+    server.selRoom_Pos(req,res);
 })
-// 分页查询：房间类型-价格
+// 分页查询：房间-位置
 router.get('/searchPage',function(req,res){
     server.selPage(req,res);
+})
+// 删除type类别
+router.post('/del_type',function(req,res){
+    server.delType(req,res);
+})
+// 删除位置信息
+router.post('/del_price',function(req,res){
+    server.delPos(req,res);
+})
+// 根据ID查询一条类型信息
+router.get('/selOne',function(req,res){
+    server.selWhere(req,res);
+})
+// 根据ID修改一条类型信息
+router.post('/updateOne',function(req,res){
+    server.updateType(req,res);
 })
 module.exports=router;
