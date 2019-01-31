@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+    <title>添加位置</title>
+</head>
+
+<body>
+   <div class="add">
+        添加位置：<input type="text" name="" id="pos">
+        <button class="btn">提交</button><br>
+   </div>
+   <table>
+    <thead>
+        <th>序号</th>
+        <th>位置</th>
+        <th>操作</th>
+    </thead>
+    <tbody class="list">
+        
+    </tbody>
+     
+   </table>
+    <script>
+        // 渲染位置信息
+        $.ajax({
+            type:'get',
+            url:'/api/room/sel_pos',
+            success:function(e){
+                var data=e.data;
+                if(e.code==0){
+                    var html='';
+                    for(var i in data){
+                        html+=`<tr>
+                        <td>${Number(i)+1}</td>
+                        <td>${data[i]['position']}</td>
+                        <td tabindex="${data[i]['position_id']}" onclick="del(this)">删除</td>
+                    </tr>`;
+                    }
+                    $('.list').html(html);
+                }
+            },
+            error:function(e){
+                debugger
+            }
+        })
+        // 删除
+        function del(obj){
+            var posid=obj.tabIndex;
+            delPos(posid);
+        }
+        // 添加位置信息
+        function addpos(){
+            $.ajax({
+                type:'post',
+                url:'/api/room/add_pos',
+                data:{
+                    position:$('#pos').val()
+                },
+                success:function(e){
+                    debugger
+                    var data=e.data;
+                    if(e.code==0){
+                        alert('位置添加成功');
+                        location.reload();
+                    }
+                },
+                error:function(e){
+                    debugger
+                }
+            })
+        }
+        // 删除位置信息
+        function delPos(id){
+            $.ajax({
+                type:'post',
+                url:'/api/room/del_pos',
+                data:{
+                    position_id:id
+                },
+                success:function(e){
+                    debugger
+                    var data=e.data;
+                    if(e.code==0){
+                        alert('位置删除成功');
+                        location.reload();
+                    }
+                },
+                error:function(e){
+                    debugger
+                }
+            })
+        }
+        $('.btn').on('click',function(){
+            addpos();
+        })
+    </script>
+</body>
+
+</html>

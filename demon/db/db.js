@@ -142,9 +142,9 @@ function del(tabname,data,callback){
      })
 }
 // 倒序查询
-function Desc(tabname,data,callback){
-     let sql=`SELECT * FROM \`${tabname}\` ORDER BY id DESC`;
-     // console.log(sql);
+function Desc(tabname,callback){
+     let sql=`SELECT * FROM \`${tabname}\` ORDER BY ${tab}_id DESC`;
+    //  console.log(sql);
      query(sql,function(res){
           var json='';
           if(res){
@@ -158,7 +158,7 @@ function Desc(tabname,data,callback){
 // 多表联查
 function selectMore(tabname,data,callback){
      // console.log(data);
-     let sql=`SELECT * from \`${tabname['tab1']}\` as a JOIN \`${tabname['tab2']}\` as b on a.${data['id1']}=b.${data['id2']} ORDER by a.${data['id1']} DESC `;
+     let sql=`SELECT * from \`${tabname['tab1']}\` as a JOIN \`${tabname['tab2']}\` as b on a.${data['id1']}=b.${data['id1']} JOIN \`${tabname['tab3']}\` as c on b.${data['id2']}=c.${data['id2']} ORDER by b.${data['id3']} DESC `;
      // console.log(sql);
      query(sql,function(res){
           var json='';

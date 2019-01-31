@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+    <title>房间列表</title>
+    <style>
+    th,td{
+        padding: 10px;
+    }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <th>房间编号</th>
+            <th>房间类型</th>
+            <th>房间位置</th>
+            <th>房间状态</th>
+            <th>房间描述</th>
+            <th>操作</th>
+        </thead>
+        <tbody class="list">
+            
+        </tbody>
+    </table>
+    <script>
+    $.ajax({
+        type:'get',
+        url:'/api/room/search_roomPos',
+        success:function(e){
+            var data=e.data;
+            if(e.code==0){
+                var html='';
+                for(var i in data){
+                    html+=`<tr>
+                    <th>${data[i]['roomnum']}</th>
+                    <th>${data[i]['roomtype_name']}</th>
+                    <th>${data[i]['position']}</th>
+                    <th>${data[i]['attitude']}</th>
+                    <th>${data[i]['description']}</th>
+                    <th><a href="addroom?${data[i]['room_id']}">修改</a><span onclick="del(this)" tabIndex="${data[i]['room_id']}">删除</span></th> 
+            </tr>`;
+                }
+                $('.list').html(html);
+            }
+        },
+        error:function(e){
+            debugger
+        }
+    })
+    function del(obj){
+        var id=obj.tabIndex;
+        $.ajax({
+            type:'post',
+            url:'/api/room/del_room',
+            data:{room_id:id},
+            success:function(e){
+                debugger
+                if(e.code==0){
+                    alert(e.msg);
+                    location.reload();
+                }
+            },
+            error:function(e){
+                debugger
+            }
+        })
+    }
+    </script>
+</body>
+</html>

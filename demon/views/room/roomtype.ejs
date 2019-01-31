@@ -79,7 +79,7 @@
         function update(id){
             $.ajax({
                 type:'post',
-                url:'/api/room/updateOne',
+                url:'/api/room/updateOneType',
                 data:{
                     roomtype_id:id,
                     room_size: $('.size').val(),
@@ -97,6 +97,7 @@
                     debugger
                     if(e.code==0){
                         alert(e.msg);
+                        location.href='typelist';
                     }
                 },
                 error:function(e){

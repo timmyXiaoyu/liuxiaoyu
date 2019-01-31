@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+    <title>添加房间</title>
+</head>
+
+<body>
+    <p>房间编号：<input type="text" class="num"></p>
+    <p>房间类型：<select name="" id="type">
+            <option value=""></option>
+        </select></p>
+    <p>房间位置：<select name="" id="pos">
+            <option value=""></option>
+        </select></p>
+    <p>入住状态<select name="" id="attitude">
+            <option value="未入住">未入住</option>
+            <option value="已入住">已入住</option>
+        </select></p>
+    <p>房间描述：<input type="text" class="des"></p>
+    <p>
+        <button class="reset">重置</button>
+        <button class="submit">提交</button>
+    </p>
+    <script>
+        roomType();
+        roomPos();
+        // 获取修改数据的ID
+        function getId() {
+            var typeid = location.search.split('?')[1];
+            if (typeid == undefined) {
+                return null;
+            } else {
+                return typeid;
+            }
+        }
+        var updateid = getId();
+        if (updateid != null) {
+            searchOne(updateid);
+        }
+        // 渲染修改列表
+        function searchOne(id){
+            $.ajax({
+                type: 'get',
+                url: '/api/room/selOneRoom',
+                data: {
+                    room_id: id
+                },
+                success: function (e) {
+                    var data=e.data;
+                    if (e.code == 0) {
+                        $('.num').val(data[0]['roomnum']);
+                        $('#type').val(data[0]['roomtype_id']);
+                        $('#pos').val(data[0]['position_id']);
+                        $('#attitude').val(data[0]['attitude']);
+                        $('.des').val(data[0]['description']);
+                    }
+                },
+                error: function (e) {
+                    debugger
+                }
+            })
+        }
+        // 渲染类型列表
+        function roomType() {
+            $.ajax({
+                type: 'get',
+                url: '/api/room/search_type',
+                success: function (e) {
+                    var data = e.data;
+                    if (e.code == 0) {
+                        var html = '';
+                        for (var i in data) {
+                            html += `<option value="${data[i]['roomtype_id']}">${data[i]['roomtype_name']}</option>`;
+                        }
+                        $('#type').html(html);
+                    }
+                },
+                error: function (e) {
+                    debugger
+                }
+            })
+        }
+        
+        // 渲染位置列表
+        function roomPos() {
+            $.ajax({
+                type: 'get',
+                url: '/api/room/sel_pos',
+                success: function (e) {
+                    var data = e.data;
+                    if (e.code == 0) {
+                        var html = '';
+                        for (var i in data) {
+                            html += `<option value="${data[i]['position_id']}">${data[i]['position']}</option>`;
+                        }
+                        $('#pos').html(html);
+                    }
+                },
+                error: function (e) {
+                    debugger
+                }
+            })
+        }
+        // 修改信息
+        function updateRoom(){
+            $.ajax({
+                type:'post',
+                url:'/api/room/updateOneRoom',
+                data:{
+                    room_id:updateid,
+                    roomnum: $('.num').val(),
+                    roomtype_id: $('#type').val(),
+                    position_id: $('#pos').val(),
+                    attitude: $('#attitude').val(),
+                    description: $('.des').val() 
+                },
+                success:function(e){
+                    if(e.code==0){
+                        alert(e.msg);
+                        location.href='roomlist';
+                    }
+                },
+                error:function(e){
+                    debugger
+                }
+            })
+        }
+        // 添加房间
+        function addRoom() {
+            $.ajax({
+                type: 'post',
+                url: '/api/room/add_room',
+                data: {
+                    roomnum: $('.num').val(),
+                    roomtype_id: $('#type').val(),
+                    position_id: $('#pos').val(),
+                    attitude: $('#attitude').val(),
+                    description: $('.des').val()
+                },
+                success: function (e) {
+                    if (e.code == 0) {
+                        alert(e.msg);
+                        location.reload();
+                    }
+                },
+                error: function (e) {
+                    debugger
+                }
+            })
+        }
+        // 查询房间 不重复添加
+        var flag = false;
+        function searchRoom() {
+            $.ajax({
+                type: 'get',
+                url: '/api/room/search_room',
+                success: function (e) {
+                    var data = e.data;
+                    if (e.code == 0) {
+                        for (var i in data) {
+                            if (data[i].roomnum == $('.num').val()) {
+                                flag = true;
+                                break;
+                            } else {
+                                flag = false;
+                            }
+                        }
+                        if (flag == false) {
+                            addRoom();
+                        } else {
+                            alert('该房间已存在');
+                        }
+                    }
+                },
+                error: function (e) {
+                    debugger
+                }
+            })
+        }
+        $('.submit').on('click', function () {
+            if(updateid==null){
+                searchRoom();
+            }
+        })
+        $('.reset').on('click', function () {
+                updateRoom();
+        })
+    </script>
+</body>
+
+</html>
