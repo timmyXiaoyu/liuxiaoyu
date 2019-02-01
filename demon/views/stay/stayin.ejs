@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+    <title>办理入住</title>
+</head>
+
+<body>
+    <p>房间编号：<input type="text" class="roomnum"></p>
+    <p>类型编号：<input type="text" class="typeid"></p>
+    <p>类型名称：<input type="text" class="typename"></p>
+    <p>房间价格：<input type="text" class="price"></p>
+    <p>客户名称：<input type="text" class="costum"></p>
+    <p>证件类型：<select name="" id="cardType">
+            <option value="身份证">身份证</option>
+            <option value="学生证">学生证</option>
+            <option value="军官证">军官证</option>
+        </select></p>
+    <p>证件号码：<input type="text" class="cardnum"></p>
+    <p>性别：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <select name="" id="sex">
+            <option value="男">男</option>
+            <option value="女">女</option>
+        </select></p>
+    <p>入住时间：<input type="text" class="stay"></p>
+    <p>离开时间：<input type="text" class="away"></p>
+    <p>联系电话：<input type="text" class="phnum"></p>
+    <p><button class="btn">确认入住</button>
+        <script>
+            var roomid = location.search.split('?')[1];
+            // 渲染下单页面
+            $.ajax({
+                type: 'get',
+                url: '/api/stay/search_room',
+                success: function (e) {
+                    var inputTime=new Date().getTime();
+                    var time=getTime(inputTime);
+                    if (e.code == 0) {
+                        var data = e.data;
+                        for (var i in data) {
+                            if (data[i]['room_id'] == roomid) {
+                                debugger
+                                $('.roomnum').val(data[i]['roomnum']);
+                                $('.typeid').val(data[i]['roomtype_id']);
+                                $('.typename').val(data[i]['roomtype_name']);
+                                $('.price').val(data[i]['price']);
+                                $('.stay').val(time);
+                            }
+                        }
+                    }
+                },
+                error: function (e) {
+                    debugger
+                }
+            })
+            // 获取时间
+            function getTime(inputTime) {
+                var date = new Date(inputTime);
+                var y = date.getFullYear();
+                var m = date.getMonth() + 1;
+                m = m < 10 ? ('0' + m) : m;
+                var d = date.getDate();
+                d = d < 10 ? ('0' + d) : d;
+                var h = date.getHours();
+                h = h < 10 ? ('0' + h) : h;
+                var minute = date.getMinutes();
+                var second = date.getSeconds();
+                minute = minute < 10 ? ('0' + minute) : minute;
+                second = second < 10 ? ('0' + second) : second;
+                return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+            }
+        </script>
+</body>
+
+</html>

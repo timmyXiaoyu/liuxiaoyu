@@ -170,6 +170,20 @@ function selectMore(tabname,data,callback){
           callback(json);
      })
 }
+// 获取最后的ID
+function selectMore(tabname,callback){
+    $sql='select last_insert_id()';
+    // console.log(sql);
+    query(sql,function(res){
+         var json='';
+         if(res){
+              json=format_data(0,'添加数据成功',res);
+         }else{
+              json=format_data(1,'添加数据失败');
+         }
+         callback(json);
+    })
+}
 // // 多表联查一条数据
 // function selectMoreOne(tabname,data,callback){
 //      // console.log(data);
