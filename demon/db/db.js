@@ -52,8 +52,13 @@ function insert(tabname,data,callback){
      var sql=`insert into \`${tabname}\` (${kv.k}) values(${kv.v})`;
      query(sql,function(res){
           var json='';
+          var aaa='';
           if(res){
-               json=format_data(0,'新增数据成功');
+            lastId('custom',function(e){
+                aaa=e;
+            })
+            console.log(aaa);
+            json=format_data(1,'新增成功');
           }else{
                json=format_data(1,'新增失败');
           }
@@ -155,7 +160,22 @@ function Desc(tabname,callback){
           callback(json);
      })
 }
-// 多表联查
+// 四表联查
+function selectFour(tabname,data,callback){
+    // console.log(data);
+    let sql=`SELECT * from \`${tabname['tab1']}\` as a JOIN \`${tabname['tab2']}\` as b on a.${data['id1']}=b.${data['id1']} JOIN \`${tabname['tab3']}\` as c on b.${data['id2']}=c.${data['id2']} JOIN \`${tabname['tab4']}\` as d on c.${data['id4']}=d.${data['id4']} ORDER by b.${data['id3']} DESC`;
+    // console.log(sql);
+    query(sql,function(res){
+         var json='';
+         if(res){
+              json=format_data(0,'查询数据成功',res);
+         }else{
+              json=format_data(1,'查询数据失败');
+         }
+         callback(json);
+    })
+}
+// 三表联查
 function selectMore(tabname,data,callback){
      // console.log(data);
      let sql=`SELECT * from \`${tabname['tab1']}\` as a JOIN \`${tabname['tab2']}\` as b on a.${data['id1']}=b.${data['id1']} JOIN \`${tabname['tab3']}\` as c on b.${data['id2']}=c.${data['id2']} ORDER by b.${data['id3']} DESC `;
@@ -170,16 +190,32 @@ function selectMore(tabname,data,callback){
           callback(json);
      })
 }
+// 二表联查
+function selectTwo(tabname,data,callback){
+         // console.log(data);
+         let sql=`SELECT * from \`${tabname['tab1']}\` as a JOIN \`${tabname['tab2']}\` as b on a.${data['id1']}=b.${data['id1']}`;
+         // console.log(sql);
+         query(sql,function(res){
+              var json='';
+              if(res){
+                   json=format_data(0,'查询数据成功',res);
+              }else{
+                   json=format_data(1,'查询数据失败');
+              }
+              callback(json);
+         })
+    }
 // 获取最后的ID
-function selectMore(tabname,callback){
-    $sql='select last_insert_id()';
+function lastId(tabname,callback){
+    var sql='select last_insert_id()';
     // console.log(sql);
     query(sql,function(res){
          var json='';
          if(res){
-              json=format_data(0,'添加数据成功',res);
+            //  console.log(res);
+            json=format_data(0,'查询数据成功',res);
          }else{
-              json=format_data(1,'添加数据失败');
+              json='返回数据失败';
          }
          callback(json);
     })
@@ -215,7 +251,7 @@ function searchPage(tabname,data,callback){
      })
 }
 module.exports={
-     insert,search,selectWhere,update,del,Desc,selectMore,searchPage
+     insert,search,selectWhere,update,del,Desc,selectMore,searchPage,selectTwo,selectFour
 }
 
 // SELECT * FROM `article` ORDER BY id DESC  倒序

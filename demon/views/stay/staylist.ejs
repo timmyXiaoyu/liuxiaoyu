@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+    <title>入住查询</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <th>订单流水</th>
+            <th>房间编号</th>
+            <th>房间类型</th>
+            <th>证件号</th>
+            <th>入住时间</th>
+            <th>离开时间</th>
+            <th>联系人</th>
+            <th>联系电话</th>
+            <th>网上预订</th>
+            <th>完成交易</th>
+            <th>操作</th>
+            
+        </thead>
+        <tbody class="list">
+
+        </tbody>
+    </table>
+    <script>
+    $.ajax({
+            type: 'get',
+            url: '/api/stay/search_list',
+            success: function (e) {
+                debugger
+                if (e.code == 0) {
+                    var html = '';
+                    var data = e.data;
+                    for (var i in data) {
+                            html += `<tr>
+                <td>${data[i]['listnum']}</td>
+                <td>${data[i]['roomnum']}</td>
+                <td>${data[i]['roomtype_name']}</td>
+                <td>${data[i]['custom_cardtype']}</td>
+                <td>${data[i]['staytime']}</td>
+                <td>${data[i]['outtime']}</td>
+                <td>${data[i]['callname']}</td>
+                <td>${data[i]['phonenumber']}</td>
+                <td>${data[i]['orweb']}</td>
+                <td>是</td>
+                <td>取消订单</td>
+            </tr>`;
+                    }
+                    $('.list').html(html);
+                }
+            },
+            error: function (e) {
+                debugger
+            }
+        })
+    </script>
+</body>
+</html>

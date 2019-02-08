@@ -36,13 +36,12 @@
                 type: 'get',
                 url: '/api/stay/search_room',
                 success: function (e) {
-                    var inputTime=new Date().getTime();
-                    var time=getTime(inputTime);
+                    var inputTime = new Date().getTime();
+                    var time = getTime(inputTime);
                     if (e.code == 0) {
                         var data = e.data;
                         for (var i in data) {
                             if (data[i]['room_id'] == roomid) {
-                                debugger
                                 $('.roomnum').val(data[i]['roomnum']);
                                 $('.typeid').val(data[i]['roomtype_id']);
                                 $('.typename').val(data[i]['roomtype_name']);
@@ -71,6 +70,74 @@
                 minute = minute < 10 ? ('0' + minute) : minute;
                 second = second < 10 ? ('0' + second) : second;
                 return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+            }
+            // 保存按钮提交事件
+            $('.btn').on('click', function () {
+                var addObj = {
+                    custom_name: $('.costum').val(),
+                    custom_card: $('.cardnum').val(),
+                    custom_cardtype: $('#cardType').val(),
+                    custom_sex: $('#sex').val(),
+                }
+                adduser(addObj);
+            })
+            // 添加用户信息
+            function adduser(obj) {
+                $.ajax({
+                    type: 'post',
+                    url: '/api/stay/add_user',
+                    data: obj,
+                    success: function (e) {
+                        updateRoom();
+                        var orderObj={
+                            room_id:roomid,
+                            roomtype_id:$('.typeid').val(),
+                            callname:$('.costum').val(),
+                            phonenumber:$('.phnum').val(),
+                            staytime:$('.stay').val(),
+                            outtime:$('.away').val(),
+                            pay:$('.price').val(),
+                            orweb:'否',
+                            listnum:new Date().getTime(),
+                        };
+                        addOrder(orderObj);
+                    },
+                    error: function (e) {
+                        debugger
+                    }
+                })
+            }
+            // 添加订单信息
+            function addOrder(obj){
+                $.ajax({
+                    type: 'post',
+                    url: '/api/stay/add_orderlist',
+                    data: obj,
+                    success: function (e) {
+                        debugger
+                    },
+                    error: function (e) {
+                        debugger
+                    }
+                })
+            }
+            // 修改房间状态
+            function updateRoom(){
+                var obj={
+                    room_id:roomid,
+                    attitude:'已入住'
+                }
+                $.ajax({
+                    type: 'post',
+                    url: '/api/room/updateOneRoom',
+                    data: obj,
+                    success: function (e) {
+                        debugger
+                    },
+                    error: function (e) {
+                        debugger
+                    }
+                })
             }
         </script>
 </body>
