@@ -47,17 +47,21 @@ function Kv(data){
 }
 
 // 插入数据的方法
+let aaa='';
 function insert(tabname,data,callback){
      var kv=Kv(data);
+     
      var sql=`insert into \`${tabname}\` (${kv.k}) values(${kv.v})`;
      query(sql,function(res){
           var json='';
-          var aaa='';
           if(res){
-            lastId('custom',function(e){
-                aaa=e;
+            lastId(async function(e){
+                return e;
+            }).then(function(e){
+                aaa=e
+                console.log(aaa);
             })
-            console.log(aaa);
+            // console.log(aaa);
             json=format_data(1,'新增成功');
           }else{
                json=format_data(1,'新增失败');
@@ -175,6 +179,26 @@ function selectFour(tabname,data,callback){
          callback(json);
     })
 }
+// 根据条件多表查询一条对应数据
+function selectFourOne(tabname,data,data1,callback){
+    // console.log(data);
+    let where_='';
+     for(var i in data1){
+          where_+=`${i}='${data1[i]}' and `
+     }
+     where_+='1';
+    let sql=`SELECT * from \`${tabname['tab1']}\` as a JOIN \`${tabname['tab2']}\` as b on a.${data['id1']}=b.${data['id1']} JOIN \`${tabname['tab3']}\` as c on b.${data['id2']}=c.${data['id2']} JOIN \`${tabname['tab4']}\` as d on c.${data['id4']}=d.${data['id4']} where ${where_}`;
+    // console.log(sql);
+    query(sql,function(res){
+         var json='';
+         if(res){
+              json=format_data(0,'查询数据成功',res);
+         }else{
+              json=format_data(1,'查询数据失败');
+         }
+         callback(json);
+    })
+}
 // 三表联查
 function selectMore(tabname,data,callback){
      // console.log(data);
@@ -206,7 +230,7 @@ function selectTwo(tabname,data,callback){
          })
     }
 // 获取最后的ID
-function lastId(tabname,callback){
+async function lastId(callback){
     var sql='select last_insert_id()';
     // console.log(sql);
     query(sql,function(res){
@@ -217,7 +241,7 @@ function lastId(tabname,callback){
          }else{
               json='返回数据失败';
          }
-         callback(json);
+         return callback(json);
     })
 }
 // // 多表联查一条数据
@@ -251,7 +275,7 @@ function searchPage(tabname,data,callback){
      })
 }
 module.exports={
-     insert,search,selectWhere,update,del,Desc,selectMore,searchPage,selectTwo,selectFour
+     insert,search,selectWhere,update,del,Desc,selectMore,searchPage,selectTwo,selectFour,selectFourOne
 }
 
 // SELECT * FROM `article` ORDER BY id DESC  倒序

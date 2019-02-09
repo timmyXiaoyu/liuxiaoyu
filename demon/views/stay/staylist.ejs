@@ -28,11 +28,12 @@
         </tbody>
     </table>
     <script>
+    //查询所有入住
     $.ajax({
             type: 'get',
             url: '/api/stay/search_list',
             success: function (e) {
-                debugger
+                // debugger
                 if (e.code == 0) {
                     var html = '';
                     var data = e.data;
@@ -58,6 +59,23 @@
                 debugger
             }
         })
+        // 根据条件查询
+        var obj={
+            roomnum:'roomnum',
+            num:'103'
+        }
+        $.ajax({
+            type: 'get',
+            url: '/api/stay/search_listOne',
+            data:obj,
+            success: function (e) {
+                // debugger
+            },
+            error: function (e) {
+                debugger
+            }
+        })
+        
     </script>
 </body>
 </html>

@@ -17,4 +17,12 @@ router.post('/add_orderlist',function(req,res){
 router.get('/search_list',function(req,res){
     server.selList_People(req,res);
 })
+// 根据条件查询消息
+router.get('/search_listOne',function(req,res){
+    server.selList_PeopleOne(req,res);
+})
+// 查询顾客id
+router.get('/search_costumid',function(req,res){
+    server.selOrderList(req,res);
+})
 module.exports=router;

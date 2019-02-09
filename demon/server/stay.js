@@ -5,6 +5,11 @@ module.exports = {
             res.send(e);
         })
     },
+    selOrderList: function (req, res) {
+        db.search('orderlist',function (e) {
+            res.send(e);
+        })
+    },
     addUser: function (req, res) {
         db.insert('custom', req.body, function (e) {
             res.send(e);
@@ -17,6 +22,14 @@ module.exports = {
     },
     selList_People: function (req, res) {
         db.selectFour({tab1:'custom',tab2:'orderlist',tab3:'room',tab4:'roomtype'},{id1:'custom_id',id2:'room_id',id3:'orderlist_id',id4:'roomtype_id'},function (e) {
+            res.send(e);
+        })
+    },
+    selList_PeopleOne: function (req, res) {
+        var xx=req.query['roomnum'];
+        console.log(xx);
+        var xxx=req.query['num'];
+        db.selectFourOne({tab1:'custom',tab2:'orderlist',tab3:'room',tab4:'roomtype'},{id1:'custom_id',id2:'room_id',id3:'orderlist_id',id4:'roomtype_id'},{roomnum:xxx},function (e) {
             res.send(e);
         })
     },
