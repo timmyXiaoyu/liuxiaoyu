@@ -21,7 +21,7 @@ router.get('/search_list',function(req,res){
 router.get('/search_listOne',function(req,res){
     server.selList_PeopleOne(req,res);
 })
-// 查询顾客id
+// 查询顾客id 
 router.get('/search_costumid',function(req,res){
     server.selOrderList(req,res);
 })

@@ -34,26 +34,26 @@
             url: '/api/stay/search_list',
             success: function (e) {
                 // debugger
-                if (e.code == 0) {
-                    var html = '';
-                    var data = e.data;
-                    for (var i in data) {
-                            html += `<tr>
-                <td>${data[i]['listnum']}</td>
-                <td>${data[i]['roomnum']}</td>
-                <td>${data[i]['roomtype_name']}</td>
-                <td>${data[i]['custom_cardtype']}</td>
-                <td>${data[i]['staytime']}</td>
-                <td>${data[i]['outtime']}</td>
-                <td>${data[i]['callname']}</td>
-                <td>${data[i]['phonenumber']}</td>
-                <td>${data[i]['orweb']}</td>
-                <td>是</td>
-                <td>取消订单</td>
-            </tr>`;
-                    }
-                    $('.list').html(html);
-                }
+            //     if (e.code == 0) {
+            //         var html = '';
+            //         var data = e.data;
+            //         for (var i in data) {
+            //                 html += `<tr>
+            //     <td>${data[i]['listnum']}</td>
+            //     <td>${data[i]['roomnum']}</td>
+            //     <td>${data[i]['roomtype_name']}</td>
+            //     <td>${data[i]['custom_cardtype']}</td>
+            //     <td>${data[i]['staytime']}</td>
+            //     <td>${data[i]['outtime']}</td>
+            //     <td>${data[i]['callname']}</td>
+            //     <td>${data[i]['phonenumber']}</td>
+            //     <td>${data[i]['orweb']}</td>
+            //     <td>是</td>
+            //     <td>取消订单</td>
+            // </tr>`;
+            //         }
+            //         $('.list').html(html);
+            //     }
             },
             error: function (e) {
                 debugger

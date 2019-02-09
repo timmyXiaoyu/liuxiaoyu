@@ -9,7 +9,7 @@ module.exports = {
         db.search('orderlist',function (e) {
             res.send(e);
         })
-    },
+    }, 
     addUser: function (req, res) {
         db.insert('custom', req.body, function (e) {
             res.send(e);

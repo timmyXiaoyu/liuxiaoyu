@@ -8,11 +8,11 @@
     <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
     <title>大堂入住</title>
     <style>
-        th,
+        /* th,
         td {
             text-align: center;
             padding: 10px;
-        }
+        } */
     </style>
 </head>
 
@@ -60,7 +60,7 @@
                 <td>${data[i]['price']}</td>
                 <td><a href="stayin?${data[i]['room_id']}">办理入住</a></td>
             </tr>`;
-                        }
+                        } 
                     }
                     $('.list').html(html);
                 }

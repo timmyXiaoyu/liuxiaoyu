@@ -69,7 +69,6 @@ function insert(tabname,data,callback){
           callback(json);
      })
 }
-
 // 查询所有数据的方法
 function search(tabname,callback){
      
@@ -117,7 +116,6 @@ function update(tabname,data,callback){
      }
      let xx = set_.lastIndexOf(',');
      let aa = set_.substr(0,xx);
- 
      let sql = `update \`${tabname}\` set ${aa} where ${where_}`;
      console.log(sql);
      query(sql, function (result) {
