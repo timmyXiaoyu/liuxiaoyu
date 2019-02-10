@@ -33,4 +33,9 @@ module.exports = {
             res.send(e);
         })
     },
+    delete: function (req, res) {
+        db.del('orderlist', req.body, function (e) {
+             res.send(e);
+        })
+   },
 }

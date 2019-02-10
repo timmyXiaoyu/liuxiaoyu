@@ -25,4 +25,8 @@ router.get('/search_listOne',function(req,res){
 router.get('/search_costumid',function(req,res){
     server.selOrderList(req,res);
 })
+// 删除订单
+router.post('/del_list',function(req,res){
+    server.delete(req,res);
+})
 module.exports=router;
